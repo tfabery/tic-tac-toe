@@ -1,0 +1,17 @@
+.board {
+  display: inline-block;
+  /*border: 5px solid #292929;*/
+  margin-top: 1em;
+}
+
+.board .boardRow .boardSpace {
+  display: inline-block;
+  border: 5px solid #292929;
+  width: 4em;
+  height: 4em;
+  overflow: hidden;
+  line-height: 4em;
+  font-size: 4em;
+  text-align: center;
+  position: relative;
+}
