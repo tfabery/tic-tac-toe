@@ -36,10 +36,23 @@ function Board() {
   };
 };
 
+Board.prototype.tie = function() {
+  var markedArray = [];
+  for (i = 1; i <= this.width; i++) {
+    for (j = 1; j <= this.height; j++) {
+      if (this.spaces[i][j].markBy === null) {
+        return false;
+      }
+      markedArray.push('true');
+    };
+  };
+  return markedArray.length;
+};
+
 var win = [7, 56, 73, 84, 146, 273, 292, 448];
 Board.prototype.winCheck = function() {
   // debugger;
-  for (var i = 0; i < win.length ;i ++) {
+  for (var i = 0; i < win.length; i ++) {
     if ((win[i] & player.score)  === win[i]) {
       return true;
     }
@@ -80,6 +93,7 @@ BoardInterface.prototype.renderBoard = function() {
 
 BoardInterface.prototype.render = function() {
   $(this.selector).empty().append(this.renderBoard());
+  $('.btn').hide();
 }
 
 function clicked() {
@@ -93,10 +107,13 @@ function clicked() {
           if (player.mark === 'X') {
             $('<span class="glyphicon glyphicon-remove"></span>').appendTo($(this));
             player.score += board.spaces[xCord][yCord].indicator;
-            console.log(player.score);
             if (board.winCheck()) {
               alert('Player 1 wins');
-              startNew();
+              homePage();
+            }
+            else if (board.tie() === 9) {
+              alert('Draw....');
+              homePage();
             }
             else {
               player = player2
@@ -105,10 +122,13 @@ function clicked() {
           else if (player.mark === 'O') {
             $('<span class="glyphicon glyphicon-unchecked"></span>').appendTo($(this));
             player.score += board.spaces[xCord][yCord].indicator;
-            console.log(player.score);
             if (board.winCheck()) {
               alert('Player 2 wins');
-              startNew();
+              homePage();
+            }
+            else if (board.tie() === 9) {
+              alert('Draw....');
+              homePage();
             }
             else {
               player = player1
@@ -119,13 +139,16 @@ function clicked() {
     };
   };
 };
-
+function homePage() {
+  $(".newBoard").empty();
+  $(".btn").show();
+}
 function startNew() {
   player1 = new Player(1, 'X');
   player2 = new Player(2, 'O');
   player = player1;
   board = new Board();
-  var ui = new BoardInterface(board, '.container');
+  var ui = new BoardInterface(board, '.newBoard');
   ui.render();
   clicked();
 }
@@ -135,6 +158,12 @@ var player2;
 var player;
 var board;
 $(function() {
-  startNew();
-  // clicked();
+  $("#vPlayer").click(function() {
+    startNew();
+  });
+
+  $("#vAi").click(function() {
+    startNew();
+  });
+
 });
